@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Energy Data | GridPulseAI</title>
+    <link rel="stylesheet" href="/static/auth.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+            padding: 30px;
+        }
+
+        .upload-card {
+            max-width: 650px;
+            margin: 40px auto;
+            padding: 28px;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(0,0,0,.06);
+        }
+
+        .upload-card h1 { margin-top: 0; }
+
+        .upload-card p {
+            color: #667085;
+            line-height: 1.6;
+        }
+
+        .upload-card input {
+            display: block;
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        .upload-card button {
+            background: #2563eb;
+            color: white;
+            padding: 12px 20px;
+            border: 0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        #message {
+            margin-top: 18px;
+            overflow-wrap: anywhere;
+        }
+    </style>
+</head>
+<body>
+    <main class="upload-card">
+        <h1>Upload your energy data</h1>
+        <p>
+            Upload an electricity bill or a consumption CSV to begin
+            building your personal energy history.
+        </p>
+
+        <form id="uploadForm">
+            <label for="energyFile">Select a file (PDF, image, or CSV)</label>
+            <input
+                type="file"
+                id="energyFile"
+                name="file"
+                accept=".pdf,.png,.jpg,.jpeg,.csv"
+                required
+            >
+            <button type="submit">Upload file</button>
+        </form>
+
+        <p id="message" role="status" aria-live="polite"></p>
+        <p><a href="/dashboard">Return to dashboard</a></p>
+    </main>
+
+    <script>
+        const form = document.getElementById("uploadForm");
+        const fileInput = document.getElementById("energyFile");
+        const message = document.getElementById("message");
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            if (file.size > 5 * 1024 * 1024) {
+                message.textContent = "Please choose a file smaller than 5 MB.";
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            message.textContent = "Uploading...";
+
+            try {
+                const response = await fetch("/api/energy/upload", {
+                    method: "POST",
+                    body: formData,
+                    credentials: "same-origin"
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.detail || "Upload failed.");
+                }
+
+                message.textContent =
+                    result.message || "File uploaded successfully.";
+            } catch (error) {
+                message.textContent = error.message;
+            }
+        });
+    </script>
+</body>
+</html>

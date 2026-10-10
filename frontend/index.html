@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GridPulseAI</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="header">
+        <div>
+            <h1>GridPulseAI</h1>
+            <p>AI-Based Energy Consumption Forecasting &amp; Optimization Agent</p>
+        </div>
+
+        <div class="header-right">
+            <button
+                type="button"
+                class="logout-button"
+                onclick="logout()"
+            >
+                Log Out
+            </button>
+        </div>
+    </header>
+
+
+    <main class="container">
+
+        <!-- ================= CURRENT WEATHER ================= -->
+        
+        <section class="weather-panel">
+
+            <!-- Weather header -->
+            <div class="weather-header">
+                <div>
+                    <h2>CURRENT WEATHER</h2>
+                    <span id="weatherLocation"></span>
+                </div>
+
+                <div id="weatherTime"></div>
+            </div>
+
+
+            <!-- Empty state: shown before a location is searched -->
+            <div class="weather-empty" id="weatherEmpty">
+                <div class="weather-empty-icon">☁️</div>
+
+                <h3>Search for a location</h3>
+
+                <p>
+                    Enter a city or location to see current weather conditions.
+                </p>
+            </div>
+
+
+            <!-- Weather results -->
+            <div class="weather-body" id="weatherContent">
+
+                <!-- LEFT SIDE: temperature and details popup -->
+                <div class="weather-main">
+
+                    <div class="weather-temperature-row">
+
+                        <div
+                            class="weather-icon"
+                            id="weatherIcon"
+                        ></div>
+
+                        <div class="temperature-block">
+
+                            <div class="temperature">
+                                <span id="temperature">--</span>
+                                <span class="degree">°C</span>
+                            </div>
+
+                            <div class="real-feel">
+                                Feels like
+                                <strong id="apparentTemperature">--</strong>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <!-- Current weather condition -->
+                    <div
+                        class="weather-condition"
+                        id="weatherCondition"
+                    ></div>
+
+
+                    <!-- More Details button and popup -->
+                    <div class="weather-details-wrapper">
+
+                        <button
+                            type="button"
+                            class="more-details"
+                            id="moreDetailsBtn"
+                            onclick="toggleWeatherDetails()"
+                            aria-expanded="false"
+                            aria-controls="extraWeatherDetails"
+                        >
+                            MORE DETAILS
+                            <span id="detailsArrow">›</span>
+                        </button>
+
+                        <div
+                            class="weather-details-popup"
+                            id="extraWeatherDetails"
+                            style="display: none;"
+                        >
+
+                            <div class="popup-header">
+                                <strong>Weather Details</strong>
+
+                                <button
+                                    type="button"
+                                    class="popup-close"
+                                    onclick="toggleWeatherDetails(false)"
+                                    aria-label="Close weather details"
+                                >
+                                    ×
+                                </button>
+                            </div>
+
+                            <div class="popup-detail">
+                                <span>Humidity</span>
+                                <strong id="humidity">--</strong>
+                            </div>
+
+                            <div class="popup-detail">
+                                <span>Air Quality PM2.5</span>
+                                <strong id="pm25">--</strong>
+                            </div>
+
+                            <div class="popup-detail">
+                                <span>Air Quality PM10</span>
+                                <strong id="pm10">--</strong>
+                            </div>
+
+                            <div class="popup-detail">
+                                <span>Ozone</span>
+                                <strong id="ozone">--</strong>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- RIGHT SIDE: weather measurements -->
+                <div class="weather-details">
+
+                    <div class="weather-detail">
+                        <span>Heat Index</span>
+                        <strong id="heatIndex">--</strong>
+                    </div>
+
+                    <div class="weather-detail">
+                        <span>Wind</span>
+                        <strong id="wind">--</strong>
+                    </div>
+
+                    <div class="weather-detail">
+                        <span>Wind Gusts</span>
+                        <strong id="windGusts">--</strong>
+                    </div>
+
+                    <div class="weather-detail">
+                        <span>Air Quality</span>
+                        <strong id="airQuality">--</strong>
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- End weather results -->
+
+
+            <!-- LOCATION SEARCH: outside weather-body so it stays visible -->
+            <div class="weather-search">
+
+                <input
+                    type="text"
+                    id="locationInput"
+                    placeholder="Enter city or location"
+                    aria-label="Enter city or location"
+                    autocomplete="off"
+                >
+
+                <button
+                    type="button"
+                    id="weatherSearchBtn"
+                    onclick="loadWeather()"
+                >
+                    Update Weather
+                </button>
+
+            </div>
+
+
+            <!-- Loading and error messages -->
+            <p
+                id="weatherStatus"
+                role="status"
+                aria-live="polite"
+            ></p>
+
+        </section>
+
+                <section class="panel bill-upload-panel">
+
+            <h2>Electricity Bill &amp; Consumption</h2>
+
+            <p>
+                Upload your electricity bill or manually enter your
+                consumption details to build your personal energy history.
+            </p>
+
+            <form id="billUploadForm">
+
+                <label for="billFile">Choose your electricity bill</label>
+
+                <input
+                    type="file"
+                    id="billFile"
+                    name="bill"
+                    accept=".pdf,.csv,.jpg,.jpeg,.png"
+                    required
+                >
+
+                <small>
+                    Supported formats: PDF, CSV, JPG and PNG.
+                </small>
+
+                <button type="submit" id="uploadBillBtn">
+                    Upload Bill
+                </button>
+
+                <p id="billUploadStatus" role="status" aria-live="polite"></p>
+
+            </form>
+
+            <hr>
+
+            <h3>Enter consumption manually</h3>
+
+            <form id="manualReadingForm">
+
+                <label for="readingDate">Reading date</label>
+
+                <input
+                    type="date"
+                    id="readingDate"
+                    required
+                >
+
+                <label for="consumptionKwh">Energy consumed (kWh)</label>
+
+                <input
+                    type="number"
+                    id="consumptionKwh"
+                    min="0"
+                    step="0.01"
+                    placeholder="Example: 8.5"
+                    required
+                >
+
+                <button type="submit" id="saveReadingBtn">
+                    Save Reading
+                </button>
+
+                <p id="readingStatus" role="status" aria-live="polite"></p>
+
+            </form>
+
+        </section>
+
+        
+<div id="dashboardContent" style="display: none;">
+
+    <!-- DASHBOARD CARDS -->
+    <section class="cards">
+
+        <div class="card">
+            <span>Latest Monthly Consumption</span>
+            <strong id="latestConsumption">--</strong>
+            <small>kWh</small>
+        </div>
+
+        <div class="card">
+            <span>Average Monthly Consumption</span>
+            <strong id="averageConsumption">--</strong>
+            <small>kWh</small>
+        </div>
+
+        <div class="card">
+            <span>Estimated Next Month</span>
+            <strong id="forecast">--</strong>
+            <small>kWh</small>
+        </div>
+
+        <div class="card">
+            <span>Consumption Status</span>
+            <strong id="anomaly">Awaiting readings</strong>
+        </div>
+
+    </section>
+
+    <!-- PERSONAL ENERGY HISTORY -->
+    <section class="panel personal-history">
+        <h2>Your Energy History</h2>
+        <div id="personalHistory">
+            Your monthly consumption history will appear here.
+        </div>
+        <p id="forecastNote"></p>
+    </section>
+
+</div>
+
+<!-- AI ADVISOR: OUTSIDE dashboardContent SO IT CAN REMAIN AVAILABLE -->
+<section class="panel advisor">
+    <h2>AI Energy Optimization Advisor</h2>
+
+    <p>
+        Ask about reducing electricity bills, efficient appliance use,
+        electricity consumption, or energy-saving tips. You can use
+        the advisor even before entering your readings.
+    </p>
+
+    <form class="question-row" id="advisorForm">
+        <input
+            type="text"
+            id="questionInput"
+            placeholder="Ask about saving electricity..."
+            aria-label="Ask the AI Energy Advisor"
+            autocomplete="off"
+            required
+        >
+
+        <button type="button" onclick="askAdvisor()">Ask AI</button>
+    </form>
+
+    <div
+        id="advisorResult"
+        class="advisor-result"
+        role="status"
+        aria-live="polite"
+    ></div>
+</section>
+
+</main>
+
+<!-- JAVASCRIPT -->
+<script src="/static/app.js"></script>
+</body>
+</html>

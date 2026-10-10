@@ -1,0 +1,353 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | GridPulseAI</title>
+    <link rel="stylesheet" href="/static/auth.css">
+
+    <style>
+        /* Compact signup layout */
+        .signup-section {
+            padding: 20px 36px;
+        }
+
+        .signup-card {
+            max-width: 500px;
+        }
+
+        .signup-card h2 {
+            margin-bottom: 5px;
+        }
+
+        .signup-card .auth-subtitle {
+            margin-bottom: 18px;
+        }
+
+        .signup-card .form-group {
+            margin-bottom: 12px;
+        }
+
+        .signup-card .form-group label {
+            margin-bottom: 5px;
+        }
+
+        .signup-card .form-group input,
+        .signup-card .form-group select {
+            width: 100%;
+            height: 42px;
+            padding: 0 12px;
+            border: 1px solid #d0d5dd;
+            border-radius: 8px;
+            background: white;
+            color: #172033;
+            font: inherit;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .signup-card .form-group input:focus,
+        .signup-card .form-group select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+        }
+
+        .signup-card .form-group select {
+            cursor: pointer;
+        }
+
+        .signup-card .password-wrapper input {
+            padding-right: 70px;
+        }
+
+        .signup-card .show-password {
+            right: 10px;
+        }
+
+        .signup-card .security-hint {
+            display: block;
+            margin-top: 5px;
+            color: #667085;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .signup-card .auth-message {
+            margin-bottom: 5px;
+        }
+
+        .signup-card .login-button {
+            height: 44px;
+            margin-top: 0;
+        }
+
+        .signup-card .signup-text {
+            margin-top: 15px;
+        }
+
+        .signup-card .auth-footer {
+            margin-top: 18px;
+        }
+
+        @media (min-width: 801px) {
+            .signup-section {
+                align-items: center;
+            }
+
+            .signup-card {
+                padding-top: 5px;
+                padding-bottom: 5px;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .signup-section {
+                padding: 24px 20px;
+            }
+
+            .signup-card .mobile-logo {
+                margin-bottom: 20px;
+            }
+
+            .signup-card .auth-footer {
+                margin-top: 20px;
+            }
+        }
+
+        @media (max-height: 760px) and (min-width: 801px) {
+            .signup-section {
+                align-items: flex-start;
+                padding-top: 16px;
+                padding-bottom: 16px;
+            }
+
+            .signup-card .auth-footer {
+                margin-top: 10px;
+            }
+
+            .signup-card .signup-text {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-page">
+
+        <div class="auth-brand">
+            <div class="brand-content">
+                <h1>GridPulseAI</h1>
+                <p>
+                    AI-Based Energy Consumption
+                    Forecasting &amp; Optimization Agent
+                </p>
+                <div class="brand-line"></div>
+                <span>Smarter energy insights. Better decisions.</span>
+            </div>
+        </div>
+
+        <main class="auth-section signup-section">
+            <div class="auth-card signup-card">
+
+                <div class="mobile-logo">GridPulseAI</div>
+
+                <h2>Create your account</h2>
+                <p class="auth-subtitle">
+                    Start exploring your energy insights.
+                </p>
+
+                <form id="signupForm">
+
+                    <div class="form-group">
+                        <label for="name">Full name</label>
+                        <input
+                            type="text"
+                            id="name"
+                            placeholder="Enter your name"
+                            autocomplete="name"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signupEmail">Email address</label>
+                        <input
+                            type="email"
+                            id="signupEmail"
+                            placeholder="Enter your email"
+                            autocomplete="email"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <div class="password-wrapper">
+                            <input
+                                type="password"
+                                id="signupPassword"
+                                placeholder="At least 8 characters"
+                                minlength="8"
+                                autocomplete="new-password"
+                                required
+                            >
+                            <button
+                                type="button"
+                                class="show-password"
+                                id="togglePassword"
+                                aria-controls="signupPassword"
+                                aria-pressed="false"
+                            >Show</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="securityQuestion">Security question</label>
+                        <select id="securityQuestion" required>
+                            <option value="" disabled selected>
+                                Choose a security question
+                            </option>
+                            <option value="What was the name of your first pet?">
+                                What was the name of your first pet?
+                            </option>
+                            <option value="What is the name of the city where you were born?">
+                                What is the name of the city where you were born?
+                            </option>
+                            <option value="What was your childhood nickname?">
+                                What was your childhood nickname?
+                            </option>
+                            <option value="What is the name of your favorite teacher?">
+                                What is the name of your favorite teacher?
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="securityAnswer">Security answer</label>
+                        <input
+                            type="text"
+                            id="securityAnswer"
+                            placeholder="Enter your answer"
+                            minlength="2"
+                            autocomplete="off"
+                            required
+                        >
+                        <small class="security-hint">
+                            Remember your answer. You'll need it to reset your password.
+                        </small>
+                    </div>
+
+                    <div
+                        id="signupMessage"
+                        class="auth-message"
+                        role="status"
+                        aria-live="polite"
+                    ></div>
+
+                    <button
+                        type="submit"
+                        class="login-button"
+                        id="signupButton"
+                    >Create Account</button>
+                </form>
+
+                <p class="signup-text">
+                    Already have an account?
+                    <a href="/login">Log in</a>
+                </p>
+
+                <div class="auth-footer">
+                    GridPulseAI · Smart Energy Management
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const signupForm = document.getElementById("signupForm");
+        const passwordInput = document.getElementById("signupPassword");
+        const togglePassword = document.getElementById("togglePassword");
+
+        togglePassword.addEventListener("click", function () {
+            const isHidden = passwordInput.type === "password";
+
+            passwordInput.type = isHidden ? "text" : "password";
+            togglePassword.textContent = isHidden ? "Hide" : "Show";
+            togglePassword.setAttribute("aria-pressed", String(isHidden));
+        });
+
+        signupForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const name = document.getElementById("name").value.trim();
+            const email = document.getElementById("signupEmail").value.trim();
+            const password = passwordInput.value;
+            const securityQuestion =
+                document.getElementById("securityQuestion").value;
+            const securityAnswer =
+                document.getElementById("securityAnswer").value.trim();
+
+            const message = document.getElementById("signupMessage");
+            const button = document.getElementById("signupButton");
+
+            message.textContent = "";
+            message.className = "auth-message";
+
+            if (password.length < 8) {
+                message.textContent =
+                    "Password must contain at least 8 characters.";
+                message.classList.add("error");
+                return;
+            }
+
+            if (securityAnswer.length < 2) {
+                message.textContent =
+                    "Please enter a security answer with at least 2 characters.";
+                message.classList.add("error");
+                return;
+            }
+
+            button.disabled = true;
+            button.textContent = "Creating account...";
+
+            try {
+                const response = await fetch("/api/auth/signup", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        password,
+                        security_question: securityQuestion,
+                        security_answer: securityAnswer
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.detail || "Unable to create account.");
+                }
+
+                message.textContent =
+                    "Account created successfully. Redirecting to login...";
+                message.classList.add("success");
+                button.textContent = "Account Created";
+
+                setTimeout(() => {
+                    window.location.href = "/login";
+                }, 1000);
+
+            } catch (error) {
+                message.textContent =
+                    error.message || "Something went wrong. Please try again.";
+                message.classList.add("error");
+                button.disabled = false;
+                button.textContent = "Create Account";
+            }
+        });
+    </script>
+</body>
+</html>

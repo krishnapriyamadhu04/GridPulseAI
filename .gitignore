@@ -1,0 +1,13 @@
+
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+*.db
+*.sqlite
+*.sqlite3
+.DS_Store
+# Large dataset and ML model files
+data/raw/individual+household+electric+power+consumption/household_power_consumption.txt
+ml/models/random_forest.joblib
